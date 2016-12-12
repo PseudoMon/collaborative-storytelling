@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block threads %}
+
+	{% for thread in threads %}
+	<div class="thread">
+		<h5 class="thread-title">{{ thread['title'] }}</h5>
+		
+		{% for piece in thread['pieces'] %}
+		<div class="piece {{ piece['colour'] }}" id="thread{{ thread['id'] }}">
+		<p>{{ piece['content'] }}
+		<span class="addinfo">{{ piece['author'] }} | {{ piece['date'].strftime('%d %B %Y') }}</span></p>
+		</div>
+		{% endfor %}
+		
+		{% set pieceid = thread['pieces'][-1]['id'] + 1 %}
+		<button class="addbutton">Add</button>
+		<form class="piece-input" action="{{ url_for('new_piece') }}" method="post">
+			<input style="display: None" name="threadid" value="{{ thread['id'] }}">
+			<input style="display: None" name="pieceid" value="{{ pieceid }}">
+			<input style="width: 40%" placeholder="Author" name="author" type="text">
+			<select style="width: auto" id="colorchoice" name="colour" placeholder="Colour">
+				<option value="">Choose colour:</option>
+				<option value="red">Red</option>
+				<option value="blue">Blue</option>
+				<option value="orange">Orange</option>
+				<option value="green">Green</option>
+			</select>
+			<textarea style="width: 100%; height: 5em" placeholder="Post a new piece" name="content" type="text"></textarea>
+			<input value="Post" type="submit">
+		</form>
+	</div>
+	{% endfor %}
+
+{% endblock %}
+
+{% block sidebar %}
+	Latest Threads:
+		<ul>
+		{% for thread in threads %}
+		<li><a href="#thread{{ thread['id'] }}">{{ thread['title'] }}</a></li>
+		{% endfor %}
+		</ul>
+{% endblock %}
