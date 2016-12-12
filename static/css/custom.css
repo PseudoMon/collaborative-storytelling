@@ -1,0 +1,64 @@
+#title {
+	text-decoration: underline;
+	margin-bottom: 1rem;
+	color: #222;
+}
+
+#title a {
+	color: #222;
+}
+
+#title a:hover {
+	color: black;
+}
+
+.thread {
+	border-top: solid 2px black;
+	border-bottom: dotted 1px grey;
+	padding: 0.5em;
+	padding-right: 0;
+}
+
+.thread-title {
+	font-size: 1.2rem;
+	margin-bottom: 1rem;
+}
+
+.piece {
+	border-right: solid 2px grey;
+	padding-right: 0.5em;
+}
+
+.piece p {
+	margin: 0.5em 0;
+}
+
+.orange { border-right-color: coral; }
+.blue { border-right-color: darkslateblue; }
+.green { border-right-color: seagreen; }
+.red { border-right-color: firebrick; }
+
+.piece-input {
+	width: 100%;
+	display: None;
+}
+
+.addpiece {
+	padding: 2px;
+}
+
+.addinfo {
+	display: None;
+}
+
+.piece:hover .addinfo, .piece:focus .addinfo {
+	font-size: 0.7em;
+	color: black;
+	display: inline;
+}
+
+.sidebar {
+	border-left: solid 2px black;
+	padding: 1rem;
+	margin-left: 10rem;
+}
