@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, url_for, json, request, redirect
 import datetime
 
@@ -99,4 +100,4 @@ def isotopydate(threads):
 	return threads
 	
 if __name__ == "__main__":
-	app.run()
+	app.run(debug=True)
