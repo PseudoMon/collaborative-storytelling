@@ -1,1 +1,2 @@
-web: python collaborative/start.py runserver 0.0.0.0:5000
+web: export FLASK_APP=collaborative/start.py
+web: flask run
