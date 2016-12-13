@@ -1,1 +1,1 @@
-web: gunicorn collaborative/start.py:app
+web: gunicorn Flask:app
