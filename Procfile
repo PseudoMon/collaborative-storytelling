@@ -1,1 +1,1 @@
-web: gunicorn collaborative.wsgi
+web: gunicorn collaborative.start.app
