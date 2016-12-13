@@ -1,1 +1,1 @@
-web: gunicorn collaborative.start.app:app
+web: gunicorn collaborative.anopenspace.app:app
