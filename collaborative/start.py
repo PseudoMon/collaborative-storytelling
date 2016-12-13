@@ -97,3 +97,6 @@ def isotopydate(threads):
 			piece['date'] = datetime.datetime.strptime(piece['date'], '%Y-%m-%d')
 			
 	return threads
+	
+if __name__ == "__main__":
+	app.run()
