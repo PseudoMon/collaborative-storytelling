@@ -75,7 +75,7 @@ def new_thread():
 	return redirect(url_for('front_page'))
 	
 def retrieve_threads():
-	file = open("alldata.dat", "r")
+	file = open(url_for('static', filename="alldata.dat"), "r")
 	threads = json.loads(file.read())
 	file.close()
 	return threads

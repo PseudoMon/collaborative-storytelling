@@ -19,17 +19,17 @@
 
   <!-- CSS
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="stylesheet" href="static/css/normalize.css">
-  <link rel="stylesheet" href="static/css/skeleton.css">
-  <link rel="stylesheet" href="static/css/custom.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/skeleton.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
 
   <!-- Favicon
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <link rel="icon" type="image/png" href="images/favicon.png">
   
   <!--Script --> 
-  <script src="static/jquery.js"></script>
-  <script src="static/script.js"></script>
+  <script src="{{ url_for('static', filename='jquery.js') }}"></script>
+  <script src="{{ urk_for('static', filename='script.js') }}"></script>
 
 </head>
 <body>
