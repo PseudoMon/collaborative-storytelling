@@ -75,7 +75,12 @@ def new_thread():
 	return redirect(url_for('front_page'))
 	
 def retrieve_threads():
-	file = open(url_for('static', filename="alldata.dat"), "r")
+	try:
+		file = open("alldata.dat", "r")
+	except FileNotFoundError:
+		newdatafile()
+		file = open("alldata.dat", "r")
+		
 	threads = json.loads(file.read())
 	file.close()
 	return threads
@@ -98,6 +103,13 @@ def isotopydate(threads):
 			piece['date'] = datetime.datetime.strptime(piece['date'], '%Y-%m-%d')
 			
 	return threads
+	
+def newdatafile():
+	piece = {'id': 1, 'content': "EMPTY", 'colour': "", 'author': "System",
+	'date': "1997-10-07"}
+	thread = {'id': 1, 'title': "Stock", 'pieces': [piece]}
+	save_threads(thread)
+	return
 	
 if __name__ == "__main__":
 	app.run(debug=True)
