@@ -1,1 +1,1 @@
-web: gunicorn wsgi
+web: python collaborative/start.py runserver 0.0.0.0:5000
