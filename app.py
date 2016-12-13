@@ -108,7 +108,7 @@ def newdatafile():
 	piece = {'id': 1, 'content': "EMPTY", 'colour': "", 'author': "System",
 	'date': "1997-10-07"}
 	thread = {'id': 1, 'title': "Stock", 'pieces': [piece]}
-	save_threads(thread)
+	save_threads([thread])
 	return
 	
 if __name__ == "__main__":
