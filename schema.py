@@ -1,7 +1,13 @@
 import peewee 
 from app import app
+import urllib.parse
 
-db = peewee.PostgresqlDatabase(app.config['DATABASE'])
+urllib.parse.uses_netloc.append('postgres')
+url = urllib.parse.urlparse(app.config['DATABASE'])
+
+db = peewee.PostgresqlDatabase(database=url.path[1:], user=url.username, password=url.password, host=url.hostname, port=url.port)
+
+#db = peewee.PostgresqlDatabase(app.config['DATABASE'])
 
 class Thread(peewee.Model):
     title = peewee.TextField()
@@ -24,10 +30,10 @@ class Piece(peewee.Model):
 if __name__ == "__main__":
     try:
         Thread.create_table()
-    except OperationalError:
+    except peewee.OperationalError:
         print("Thread table already exists")
         
     try:
         Piece.create_table()
-    except OperationalError:
+    except peewee.OperationalError:
         print("Piece table already exists")

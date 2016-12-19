@@ -3,7 +3,8 @@ import sqlite3
 from flask import Flask, render_template, url_for, json, request, redirect, g
 import datetime
 import peewee
-from schematest import Thread, Piece, db
+from schema import Thread, Piece, db
+import sys
 
 app = Flask(__name__)
 app.config.from_object(__name__)
