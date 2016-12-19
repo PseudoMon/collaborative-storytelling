@@ -1,0 +1,4 @@
+venv*
+*db
+peewee*
+alldata.dat
