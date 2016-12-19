@@ -1,9 +1,9 @@
 import peewee 
-from app import app
 import urllib.parse
+import os
 
 urllib.parse.uses_netloc.append('postgres')
-url = urllib.parse.urlparse(app.config['DATABASE'])
+url = urllib.parse.urlparse(os.environ['DATABASE_URL'])
 
 db = peewee.PostgresqlDatabase(database=url.path[1:], user=url.username, password=url.password, host=url.hostname, port=url.port)
 

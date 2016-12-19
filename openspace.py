@@ -2,7 +2,7 @@ import os
 from flask import Flask, render_template, url_for, json, request, redirect, g
 import datetime
 import peewee
-from schema import Thread, Piece, db
+from schematest import Thread, Piece, db
 
 app = Flask(__name__)
 app.config.from_object(__name__)
