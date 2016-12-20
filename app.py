@@ -11,8 +11,8 @@ app.config.update(dict (
     DATABASE=os.environ['DATABASE_URL']
 ))
 
-################
-# Database Test
+# ###############
+# Database handling
 @app.before_request
 def before_request():
     db.connect()
@@ -32,16 +32,11 @@ def retrieve_threads_db():
         threads.append({'id': t.id, 'title': t.title, 'pieces': pieces})
     
     return threads
-    
-# ###Data schema
-# [thread, thread, thread]
-# thread = {id: int, title: string, pieces: [piece, piece, piece]}
-# piece = {id: int, content: string, colour: string, author: string, date: dateobject?}
 
+# ###############
+# Routing et cetera
 @app.route('/')
 def front_page():
-    #threads = retrieve_threads()
-    #threads = isotopydate(threads)
     threads = retrieve_threads_db()
     return render_template('index.html', threads=threads)
     
@@ -52,7 +47,6 @@ def about_page():
 @app.route('/newpiece', methods=['POST'])
 def new_piece():
     threadid = request.form['threadid']
-    #pieceid = request.form['pieceid']
     author = request.form['author']
     date = getdate()
     content = request.form['content']
@@ -62,27 +56,17 @@ def new_piece():
         author = "Anonymous"
     
     threadid = int(threadid)
-    #pieceid = int(pieceid)
     thread = Thread.select().where(Thread.id==threadid).get()
     thread.latest_date = getdate()
     thread.save()
     
     piece = Piece.create(thread=thread, content=content, colour=colour, author=author, date=date)
-    
     piece.save()
-    #piece = {'id': pieceid, 'content': content, 'colour': colour, 'author': author, 'date': date}    
-    #threadid = threadid - 1
-    #threads[threadid]['pieces'].append(piece)
-    
-    #save_threads(threads)
     
     return redirect(url_for('front_page'))
     
 @app.route('/newthread', methods=['GET', 'POST'])
 def new_thread():
-    #threads = retrieve_threads()
-    #threadid = len(threads) + 1
-    
     if request.method == 'GET':
         threads = retrieve_threads_db()
         return render_template('newthread.html', threads=threads)
@@ -103,32 +87,11 @@ def new_thread():
     
     piece = Piece.create(thread=thread, content=content, colour=colour, author=author, date=date)
     piece.save()
-    #piece = {'id': 1, 'content': content, 'colour': colour, 'author': author, 'date': date}
-    #thread = {'id': threadid, 'title': title, 'pieces': [piece]}
-    #threads.append(thread)
-    
-    #save_threads(threads)
     
     return redirect(url_for('front_page'))
-    
-def retrieve_threads():
-    try:
-        file = open("alldata.dat", "r")
-    except FileNotFoundError:
-        newdatafile()
-        file = open("alldata.dat", "r")
-        
-    threads = json.loads(file.read())
-    file.close()
-    return threads
 
-def save_threads(threads):
-    threads = json.dumps(threads)
-    file = open("alldata.dat", "w")
-    file.write(threads)
-    file.close()
-    return
-    
+# ###############
+# Misc functions
 def getdate():
     #d = datetime.date.today()
     #d = d.isoformat()
@@ -136,18 +99,13 @@ def getdate():
     return d
     
 def isotopydate(threads):
+    # a converter for when when I was using json for everything
     for thread in threads:
         for piece in thread['pieces']:
             piece['date'] = datetime.datetime.strptime(piece['date'], '%Y-%m-%d')
             
     return threads
     
-def newdatafile():
-    piece = {'id': 1, 'content': "EMPTY", 'colour': "", 'author': "System",
-    'date': "1997-10-07"}
-    thread = {'id': 1, 'title': "Stock", 'pieces': [piece]}
-    save_threads([thread])
-    return
     
 if __name__ == "__main__":
     app.run(debug=True)

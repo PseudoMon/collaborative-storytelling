@@ -1,4 +1,6 @@
 venv*
-*db
+*.db
 peewee*
 alldata.dat
+__pycache__*
+*test.py
