@@ -2,14 +2,20 @@ import os
 from flask import Flask, render_template, url_for, json, request, redirect, g
 import datetime
 import peewee
-from schema import Thread, Piece, db
+from schema import Thread, Piece, Comment, Tag, db
 
 app = Flask(__name__)
 app.config.from_object(__name__)
 
-app.config.update(dict (
+# Windows can't read Heroku's postgre properly enough to put it
+#   into DATABASE_URL :(
+try:
+    app.config.update(dict (
     DATABASE=os.environ['DATABASE_URL']
-))
+    ))
+except KeyError:
+    pass
+    
 
 # ###############
 # Database handling
@@ -44,6 +50,21 @@ def front_page():
 def about_page():
     return render_template('about.html')
     
+@app.route('/thread/<threadid>/')
+def thread_page(threadid):
+
+    t = Thread.select().where(Thread.id==threadid).get()
+    pieces = []
+    for piece in Piece.select().where(Piece.thread==t):
+        pieces.append(piece)
+        
+    comments = []
+    for comment in Comment.select().where(Comment.thread==t):
+        comments.append(comment)
+        
+    thread = {'id': t.id, 'title': t.title, 'pieces': pieces}
+    return render_template('thread.html', thread=thread, comments=comments)
+    
 @app.route('/newpiece', methods=['POST'])
 def new_piece():
     threadid = request.form['threadid']
@@ -63,7 +84,7 @@ def new_piece():
     piece = Piece.create(thread=thread, content=content, colour=colour, author=author, date=date)
     piece.save()
     
-    return redirect(url_for('front_page'))
+    return redirect(url_for('thread_page', threadid=threadid))
     
 @app.route('/newthread', methods=['GET', 'POST'])
 def new_thread():
@@ -76,6 +97,7 @@ def new_thread():
     date = getdate()
     content = request.form['piececontent']
     colour = request.form['colour']
+    tags = splittags(request.form['tags'])
     
     if title == "":
         title = "Untitled"
@@ -85,10 +107,32 @@ def new_thread():
     thread = Thread.create(title=title, create_date=date, latest_date=date)
     thread.save()
     
+    for tag in tags:
+        if tag == '':
+            pass
+        else:
+            tagsindb = Tag.create(thread=thread, sharp=tag)
+            tagsindb.save()
+    
     piece = Piece.create(thread=thread, content=content, colour=colour, author=author, date=date)
     piece.save()
     
-    return redirect(url_for('front_page'))
+    return redirect(url_for('thread_page', threadid=threadid))
+    
+@app.route('/newcomment', methods=['POST'])
+def new_comment():
+    threadid = request.form['threadid']
+    author = request.form['author']
+    colour = request.form['colour']
+    content = request.form['content']
+    date = getdate()
+    
+    threadid = int(threadid)
+    thread = Thread.select().where(Thread.id==threadid).get()
+    comment = Comment.create(thread=thread, comment=content, colour=colour, author=author, date=date)
+    comment.save()
+    
+    return redirect(url_for('thread_page', threadid=threadid))
 
 # ###############
 # Misc functions
@@ -106,6 +150,11 @@ def isotopydate(threads):
             
     return threads
     
+def splittags(tags):
+    tags = tags.split('#')
+    if tags[0] == '':
+        tags.pop(0)
+    return tags;    
     
 if __name__ == "__main__":
     app.run(debug=True)

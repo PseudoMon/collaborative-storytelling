@@ -33,11 +33,6 @@
 	margin: 0.5em 0;
 }
 
-.orange { border-right-color: coral; }
-.blue { border-right-color: darkslateblue; }
-.green { border-right-color: seagreen; }
-.red { border-right-color: firebrick; }
-
 .piece-input {
 	width: 100%;
 	display: None;
@@ -59,6 +54,39 @@
 
 .sidebar {
 	border-left: solid 2px black;
-	padding: 1rem;
-	margin-left: 10rem;
+	padding-left: 1rem;
 }
+
+@media (min-width: 750px) {
+    .sidebar{margin-left: 5rem;}
+}
+
+.sidebar-title {
+    font-size: 2rem;
+}
+.comment .addinfo {
+    font-size: 0.7em;
+    color: black;
+    display: block;
+}
+
+.comment .author {
+    font-weight: bold;
+}
+
+.comment {
+    padding: 0 0 0.2rem 0.5rem;
+    margin: 0.2rem 0;
+    background-color: lightgrey;
+    border-right: solid 0.3rem grey;
+}
+
+.orange { border-right-color: coral; }
+.blue { border-right-color: darkslateblue; }
+.green { border-right-color: seagreen; }
+.red { border-right-color: firebrick; }
+
+.comment.orange { background-color: #F5B173; }
+.comment.blue { background-color: #9C86C7; }
+.comment.green { background-color: #8EBF9B; }
+.comment.red { background-color: #E79C92; }

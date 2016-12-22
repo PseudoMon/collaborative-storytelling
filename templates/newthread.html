@@ -1,22 +1,21 @@
 {% extends "base.html" %}
+{% block title %}- New Thread{% endblock %}
 
 {% block threads %}
 	<div class="thread">
 	<form class="thread-input" action="{{ url_for('new_thread') }}" method="post">
 
-		<div class="row"><div class="twelve columns">
+		<div class="row">
 		<label for="threadtitle">Title</label>
 		<input id="threadtitle" name="title" placeholder="Untitled" type="text">
-		</div></div>
+		</div>
 		
 		<div class="row">
-		<div class="three columns" style="margin-right: 2rem">
 		<label for="threadauthor">Author</label>
 		<input id="threadauthor" name="author" placeholder="Anonymous" type="text">
-		</div></div>
+		</div>
 		
 		<div class="row">
-		<div class="three columns">
 		<label for="colorchoice">Colour</label>
 		<select style="width: auto" id="colorchoice" name="colour" placeholder="Colour">
 			<option value="">Choose colour:</option>
@@ -25,13 +24,16 @@
 			<option value="orange">Orange</option>
 			<option value="green">Green</option>
 		</select>
-		</div></div>
+		</div>
 		
 		<div class="row">
-		<div style="twelve columns">
 		<label for="firstpiece">Opening</label>
 		<textarea style="width: 100%; height: 10em;" id="firstpiece" name="piececontent" type="text"></textarea>
 		</div>
+        
+        <div class="row">
+		<label for="tags">Tags</label>
+		<input id="tags" placeholder="#separate by #hashtags" name="tags" type="text"></input>
 		</div>
 		
 		<input value="Post" type="submit">

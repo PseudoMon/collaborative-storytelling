@@ -5,7 +5,7 @@
   <!-- Basic Page Needs
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <meta charset="utf-8">
-  <title>An Open Space</title>
+  <title>An Open Space {% block title %}{% endblock %}</title>
   <meta name="description" content="">
   <meta name="author" content="">
 
@@ -40,18 +40,21 @@
     <div class="row">
       <div class="one-half column" style="margin-top: 4rem">
         <h1 id="title"><a href="{{ url_for('front_page') }}">An Open Space</a></h1>
-		<a href="{{ url_for('about_page') }}">About</a> // <a href="{{ url_for('new_thread') }}">New Thread</a> // <a href="http://getskeleton.com">Skeleton</a>
+		<a href="{{ url_for('about_page') }}">About</a> // 
+        <a href="{{ url_for('new_thread') }}">New Thread</a> // 
+        <a href="http://getskeleton.com">Skeleton</a> //
+        <a>Search</a>
 		</div>
 	</div>
 	
 	<div class="row" style="margin-top: 2rem;">
-		<div class="one-half column">
+		<div class="seven columns">
 			{% block threads %}
 			{% endblock %}
 			<a href="#title">Go to top</a>
 		</div>
 		
-		<div class="three columns sidebar">
+		<div class="four columns sidebar">
 			{% block sidebar %}
 			{% endblock %}
 		</div>

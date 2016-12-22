@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}- {{ thread['title']}}{% endblock %}
+
+{% block threads %}
+	<div class="thread" id="thread{{ thread['id'] }}">
+		<h5 class="thread-title">{{ thread['title'] }}</h5>
+		
+		{% for piece in thread['pieces'] %}
+		<div class="piece {{ piece['colour'] }}">
+		<p>{{ piece['content'] }}
+		<span class="addinfo">{{ piece['author'] }} | {{ piece['date'].strftime('%H:%M %d %B %Y') }}</span></p>
+		</div>
+		{% endfor %}
+		
+		<button class="addbutton">Add</button>
+		<form class="piece-input" action="{{ url_for('new_piece') }}" method="post">
+			<input style="display: None" name="threadid" value="{{ thread['id'] }}">
+			<input style="width: 40%" placeholder="Author" name="author" type="text">
+			<select style="width: auto" id="colorchoice" name="colour" placeholder="Colour">
+				<option value="">Choose colour:</option>
+				<option value="red">Red</option>
+				<option value="blue">Blue</option>
+				<option value="orange">Orange</option>
+				<option value="green">Green</option>
+			</select>
+			<textarea style="width: 100%; height: 5em" placeholder="Post a new piece" name="content" type="text"></textarea>
+			<input value="Post" type="submit">
+		</form>
+	</div>
+{% endblock %}
+
+{% block sidebar %}
+	<h3 class="sidebar-title">Talk:</h3>
+        {% for comment in comments %}
+        <p class="comment {{ comment['colour'] }}"><span class="addinfo">{{ comment['date'].strftime('%Y/%m/%d %H:%M') }}</span>
+        {% if comment['author'] != '' %}<span class="author">{{ comment['author'] }}: </span>{% endif %} 
+        {{ comment['comment'] }}</p>
+        {% endfor %}
+            
+    <button class="addbutton">Say</button>
+    <form class="piece-input" action="{{ url_for('new_comment') }}" method="post">
+        <input style="display: None" name="threadid" value="{{ thread['id'] }}">
+        <input style="width: 40%" placeholder="Name" name="author" type="text">
+        <select style="width: auto" id="colorchoice" name="colour" placeholder="Colour">
+            <option value="">Choose colour:</option>
+            <option value="red">Red</option>
+            <option value="blue">Blue</option>
+            <option value="orange">Orange</option>
+            <option value="green">Green</option>
+        </select>
+        <textarea style="width: 100%" placeholder="Say something" name="content" type="text"></textarea>
+        <input value="Post" type="submit">
+    </form>
+{% endblock %}

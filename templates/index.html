@@ -4,20 +4,20 @@
 
 	{% for thread in threads %}
 	<div class="thread" id="thread{{ thread['id'] }}">
-		<h5 class="thread-title">{{ thread['title'] }}</h5>
+		<h5 class="thread-title"><a href="{{ url_for('thread_page', threadid=thread['id']) }}">
+        {{ thread['title'] }}
+        </a></h5>
 		
 		{% for piece in thread['pieces'] %}
 		<div class="piece {{ piece['colour'] }}">
 		<p>{{ piece['content'] }}
-		<span class="addinfo">{{ piece['author'] }} | {{ piece['date'].strftime('%d %B %Y') }}</span></p>
+		<span class="addinfo">{{ piece['author'] }} | {{ piece['date'].strftime('%H:%M %d %B %Y') }}</span></p>
 		</div>
 		{% endfor %}
 		
-		{% set pieceid = thread['pieces'][-1]['id'] + 1 %}
 		<button class="addbutton">Add</button>
 		<form class="piece-input" action="{{ url_for('new_piece') }}" method="post">
-			<input style="display: None" name="threadid" value="{{ thread['id'] }}">
-			<!-- <input style="display: None" name="pieceid" value="{{ pieceid }}"> -->
+			<input style="display: None" name="threadid" value="{{ thread['id'] }}" >
 			<input style="width: 40%" placeholder="Author" name="author" type="text">
 			<select style="width: auto" id="colorchoice" name="colour" placeholder="Colour">
 				<option value="">Choose colour:</option>
@@ -31,7 +31,6 @@
 		</form>
 	</div>
 	{% endfor %}
-
 {% endblock %}
 
 {% block sidebar %}
