@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}- Search{% endblock %}
+
+{% block threads %}
+<div class="thread" style="border-bottom: none">
+    <h2 style="font-size:2rem">Search</h2>
+    <form action="{{ url_for('search_threads') }}" method="get">
+    <div class="two-thirds column">
+    <input name="search" style="width: 100%" type="text" placeholder="separated by spaces, #tags">
+    </div>
+    <div class="one-third column">
+    <input value="Search" type="submit">
+    </div>
+    
+    {% for thread in threads %}
+    <div class="row" style="margin-bottom: 1rem; border-bottom: dotted grey 1px">
+    <div class="one-half column" style="font-size:2rem">{{ thread['title'] }}</div>
+    <div class="one-half column" style="font-size:1.2rem; text-align: right">Last posted: {{ thread['latest_date'].strftime('%d %B %Y') }} <br>Tags: 
+    {% for tag in threads['tags'] %}#{{ tag }} {% endfor %}</div>
+    </div>
+    {% endfor %}
+    
+    {% if not threads %}Sorry! We can't find anything with '{{ request.args.get('search') }}'{% endif %}
+</div>
+{% endblock %}

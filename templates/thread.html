@@ -30,6 +30,10 @@
 {% endblock %}
 
 {% block sidebar %}
+    {% if tags %}<h3 class="sidebar-title">Tags:
+    <span style="font-size:0.7em">{% for tag in tags %}
+    <a href="bla">#{{ tag['sharp'] }}</a> {% endfor %}</span></h3>{% endif %}
+    
 	<h3 class="sidebar-title">Talk:</h3>
         {% for comment in comments %}
         <p class="comment {{ comment['colour'] }}"><span class="addinfo">{{ comment['date'].strftime('%Y/%m/%d %H:%M') }}</span>

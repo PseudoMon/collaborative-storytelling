@@ -21,7 +21,7 @@ class Thread(peewee.Model):
         database = db
         
 class Piece(peewee.Model):
-    thread = peewee.ForeignKeyField(Thread)
+    thread = peewee.ForeignKeyField(Thread, related_name='pieces'))
     content = peewee.TextField()
     colour = peewee.TextField()
     author = peewee.TextField()
@@ -31,14 +31,14 @@ class Piece(peewee.Model):
         database = db
         
 class Tag(peewee.Model):
-    thread = peewee.ForeignKeyField(Thread)
+    thread = peewee.ForeignKeyField(Thread, related_name='tags')
     sharp = peewee.TextField()
     
     class Meta:
         database = db
         
 class Comment(peewee.Model):
-    thread = peewee.ForeignKeyField(Thread)
+    thread = peewee.ForeignKeyField(Thread, related_name='comments')
     comment = peewee.TextField()
     author = peewee.TextField()
     colour = peewee.TextField()

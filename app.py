@@ -34,10 +34,10 @@ def after_request(response):
     db.close()
     return response
     
-def retrieve_threads_db():
+def retrieve_threads_db(selected_threads):
     threads = []
     
-    for t in Thread.select().order_by(Thread.latest_date.desc()).limit(5):
+    for t in selected_threads:
         pieces = []
         for piece in Piece.select().where(Piece.thread==t):
             pieces.append(piece)
@@ -49,7 +49,9 @@ def retrieve_threads_db():
 # Routing et cetera
 @app.route('/')
 def front_page():
-    threads = retrieve_threads_db()
+    selector = Thread.select().order_by(Thread.latest_date.desc()).limit(5)
+    threads = retrieve_threads_db(selector)
+    
     return render_template('index.html', threads=threads, authorses=escape(session['author']), colourses=escape(session['colour']))
     
 @app.route('/about')
@@ -68,9 +70,13 @@ def thread_page(threadid):
     for comment in Comment.select().where(Comment.thread==t):
         comments.append(comment)
         
+    tags = []
+    for tag in Tag.select().where(Tag.thread==t):
+        tags.append(tag)
+        
     thread = {'id': t.id, 'title': t.title, 'pieces': pieces}
     
-    return render_template('thread.html', thread=thread, comments=comments, authorses=escape(session['author']), colourses=escape(session['colour']))
+    return render_template('thread.html', thread=thread, comments=comments, tags=tags, authorses=escape(session['author']), colourses=escape(session['colour']))
     
 @app.route('/newpiece', methods=['POST'])
 def new_piece():
@@ -149,6 +155,42 @@ def new_comment():
     comment.save()
     
     return redirect(url_for('thread_page', threadid=threadid))
+    
+@app.route('/search/')
+def search_threads():
+    searchin = request.args.get('search')
+    if not searchin:
+        return render_template('searchpage.html')
+    
+    searchin = searchin.split() 
+    #split words
+    
+    searched_threads = []
+    
+    for word in searchin:
+        if word[0] == '#':
+            #if word is a tag, search through Tags
+            word = word.strip('#')
+            for tag in Tag.select().where(Tag.sharp == word):
+                if tag.thread in searched_threads:
+                    pass
+                else:
+                    searched_threads.append(tag.thread)
+
+        else:
+            #search through content in Pieces
+            for piece in Piece.select().where(Piece.content.contains(word)):
+                if piece.thread in searched_threads:
+                    pass
+                else:
+                    searched_threads.append(piece.thread)
+                    
+            #search through thread titles
+            for thread in Thread.select().where(Thread.title.contains(word)):
+                searched_threads.append(thread)
+    
+    return render_template('searchpage.html', threads=searched_threads)
+    
 
 # ###############
 # Misc functions
@@ -170,6 +212,8 @@ def splittags(tags):
     tags = tags.split('#')
     if tags[0] == '':
         tags.pop(0)
+    for tags in tags:
+        tag = tag.strip()
     return tags;    
     
 if __name__ == "__main__":

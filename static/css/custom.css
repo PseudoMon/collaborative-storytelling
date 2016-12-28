@@ -63,7 +63,14 @@
 
 .sidebar-title {
     font-size: 2rem;
+    margin-top: 2rem;
+    margin-bottom: 0.7rem;
 }
+
+.sidebar-title:first-child {
+        margin-top: 0;
+}
+
 .comment .addinfo {
     font-size: 0.7em;
     color: black;
