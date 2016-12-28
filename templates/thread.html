@@ -15,13 +15,13 @@
 		<button class="addbutton">Add</button>
 		<form class="piece-input" action="{{ url_for('new_piece') }}" method="post">
 			<input style="display: None" name="threadid" value="{{ thread['id'] }}">
-			<input style="width: 40%" placeholder="Author" name="author" type="text">
+			<input style="width: 40%" placeholder="Author" name="author" type="text" value="{{ authorses }}">
 			<select style="width: auto" id="colorchoice" name="colour" placeholder="Colour">
 				<option value="">Choose colour:</option>
-				<option value="red">Red</option>
-				<option value="blue">Blue</option>
-				<option value="orange">Orange</option>
-				<option value="green">Green</option>
+                <option value="red" {% if colourses == 'red' %}selected{% endif %}>Red</option>
+                <option value="blue" {% if colourses == 'blue' %}selected{% endif %}>Blue</option>
+                <option value="orange" {% if colourses == 'orange' %}selected{% endif %}>Orange</option>
+                <option value="green" {% if colourses == 'green' %}selected{% endif %}>Green</option>
 			</select>
 			<textarea style="width: 100%; height: 5em" placeholder="Post a new piece" name="content" type="text"></textarea>
 			<input value="Post" type="submit">
@@ -40,13 +40,13 @@
     <button class="addbutton">Say</button>
     <form class="piece-input" action="{{ url_for('new_comment') }}" method="post">
         <input style="display: None" name="threadid" value="{{ thread['id'] }}">
-        <input style="width: 40%" placeholder="Name" name="author" type="text">
+        <input style="width: 40%" placeholder="Name" name="author" type="text" value="{{ authorses }}">
         <select style="width: auto" id="colorchoice" name="colour" placeholder="Colour">
             <option value="">Choose colour:</option>
-            <option value="red">Red</option>
-            <option value="blue">Blue</option>
-            <option value="orange">Orange</option>
-            <option value="green">Green</option>
+			<option value="red" {% if colourses == 'red' %}selected{% endif %}>Red</option>
+			<option value="blue" {% if colourses == 'blue' %}selected{% endif %}>Blue</option>
+			<option value="orange" {% if colourses == 'orange' %}selected{% endif %}>Orange</option>
+			<option value="green" {% if colourses == 'green' %}selected{% endif %}>Green</option>
         </select>
         <textarea style="width: 100%" placeholder="Say something" name="content" type="text"></textarea>
         <input value="Post" type="submit">

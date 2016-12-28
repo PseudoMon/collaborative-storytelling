@@ -1,14 +1,16 @@
 import os
-from flask import Flask, render_template, url_for, json, request, redirect, g
+from flask import Flask, render_template, url_for, json, request, redirect, g, session, escape
 import datetime
 import peewee
 from schema import Thread, Piece, Comment, Tag, db
 
 app = Flask(__name__)
 app.config.from_object(__name__)
+app.secret_key = '\x157;S\xc0\xa2M\x89\xedS\xffAlBx\xdaf\xc9<\x1e oZ\x04'
 
-# Windows can't read Heroku's postgre properly enough to put it
+# Windows can't read Heroku's postgres properly enough to put it
 #   into DATABASE_URL :(
+# Can't use this in the database .py file yet because of a weird recursive import bug
 try:
     app.config.update(dict (
     DATABASE=os.environ['DATABASE_URL']
@@ -21,6 +23,10 @@ except KeyError:
 # Database handling
 @app.before_request
 def before_request():
+    if 'author' not in session:
+        session['author'] = ""
+    if 'colour' not in session:
+        session['colour'] = ""
     db.connect()
 
 @app.after_request
@@ -44,7 +50,7 @@ def retrieve_threads_db():
 @app.route('/')
 def front_page():
     threads = retrieve_threads_db()
-    return render_template('index.html', threads=threads)
+    return render_template('index.html', threads=threads, authorses=escape(session['author']), colourses=escape(session['colour']))
     
 @app.route('/about')
 def about_page():
@@ -63,7 +69,8 @@ def thread_page(threadid):
         comments.append(comment)
         
     thread = {'id': t.id, 'title': t.title, 'pieces': pieces}
-    return render_template('thread.html', thread=thread, comments=comments)
+    
+    return render_template('thread.html', thread=thread, comments=comments, authorses=escape(session['author']), colourses=escape(session['colour']))
     
 @app.route('/newpiece', methods=['POST'])
 def new_piece():
@@ -75,6 +82,9 @@ def new_piece():
     
     if author == "":
         author = "Anonymous"
+    else:
+        session['author'] = author
+    session['colour'] = colour
     
     threadid = int(threadid)
     thread = Thread.select().where(Thread.id==threadid).get()
@@ -90,7 +100,7 @@ def new_piece():
 def new_thread():
     if request.method == 'GET':
         threads = retrieve_threads_db()
-        return render_template('newthread.html', threads=threads)
+        return render_template('newthread.html', threads=threads, authorses=escape(session['author']), colourses=escape(session['colour']))
     
     title = request.form['title']
     author = request.form['author']
@@ -103,6 +113,9 @@ def new_thread():
         title = "Untitled"
     if author == "":
         author = "Anonymous"
+    else:
+        session['author'] = author
+    session['colour'] = colour
     
     thread = Thread.create(title=title, create_date=date, latest_date=date)
     thread.save()
@@ -117,7 +130,7 @@ def new_thread():
     piece = Piece.create(thread=thread, content=content, colour=colour, author=author, date=date)
     piece.save()
     
-    return redirect(url_for('thread_page', threadid=threadid))
+    return redirect(url_for('front_page'))
     
 @app.route('/newcomment', methods=['POST'])
 def new_comment():
@@ -126,6 +139,9 @@ def new_comment():
     colour = request.form['colour']
     content = request.form['content']
     date = getdate()
+    
+    session['author'] = author
+    session['colour'] = colour
     
     threadid = int(threadid)
     thread = Thread.select().where(Thread.id==threadid).get()

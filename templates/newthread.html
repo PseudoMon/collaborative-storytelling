@@ -12,17 +12,17 @@
 		
 		<div class="row">
 		<label for="threadauthor">Author</label>
-		<input id="threadauthor" name="author" placeholder="Anonymous" type="text">
+		<input id="threadauthor" name="author" placeholder="Anonymous" type="text" value="{{ authorses }}">
 		</div>
 		
 		<div class="row">
 		<label for="colorchoice">Colour</label>
 		<select style="width: auto" id="colorchoice" name="colour" placeholder="Colour">
 			<option value="">Choose colour:</option>
-			<option value="red">Red</option>
-			<option value="blue">Blue</option>
-			<option value="orange">Orange</option>
-			<option value="green">Green</option>
+			<option value="red" {% if colourses == 'red' %}selected{% endif %}>Red</option>
+			<option value="blue" {% if colourses == 'blue' %}selected{% endif %}>Blue</option>
+			<option value="orange" {% if colourses == 'orange' %}selected{% endif %}>Orange</option>
+			<option value="green" {% if colourses == 'green' %}selected{% endif %}>Green</option>
 		</select>
 		</div>
 		
